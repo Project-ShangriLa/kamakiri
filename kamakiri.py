@@ -64,14 +64,33 @@ result = requests.get(url)
 
 master_list = json.loads(result.text)
 
+
+print('og_title,og_type,og_url,og_image,og_site_name,og_description')
+
 for master in master_list:
 
-    print(master['title'] + " " + master['public_url'])
+    #    print(master['title'] + " " + master['public_url'])
 
-    r = requests.get(master['public_url'])
+    html = requests.get(master['public_url'])
 
-    html = open(r.text)
+    bsObj = BeautifulSoup(html.text, "html.parser")
 
-    bsObj = BeautifulSoup(html.read(), "html.parser")
+    v = bsObj.find("meta", attrs={"property":"og:title"})
+    og_title = v.get("content") if v else ""
 
-    og_type = bsObj.select()
+    v = bsObj.find("meta", attrs={"property":"og:type"})
+    og_type = v.get("content") if v else ""
+
+    v = bsObj.find("meta", attrs={"property":"og:url"})
+    og_url = v.get("content") if v else ""
+
+    v = bsObj.find("meta", attrs={"property":"og:image"})
+    og_image = v.get("content") if v else ""
+
+    v = bsObj.find("meta", attrs={"property":"og:site_name"})
+    og_site_name = v.get("content") if v else ""
+
+    v = bsObj.find("meta", attrs={"property":"og:description"})
+    og_description = v.get("content") if v else ""
+
+    print(','.join([og_title, og_type, og_url, og_image, og_site_name, og_description]))
