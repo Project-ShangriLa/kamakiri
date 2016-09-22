@@ -65,15 +65,9 @@ result = requests.get(url)
 master_list = json.loads(result.text)
 
 
-print('og_title,og_type,og_url,og_image,og_site_name,og_description')
+print('bases_id, title, public_url, og_title,og_type,og_url,og_image,og_site_name,og_description')
 
-for master in master_list:
-
-    #    print(master['title'] + " " + master['public_url'])
-
-    html = requests.get(master['public_url'])
-
-    bsObj = BeautifulSoup(html.text, "html.parser")
+def parse_meta_data(bsObj):
 
     v = bsObj.find("meta", attrs={"property":"og:title"})
     og_title = v.get("content") if v else ""
@@ -93,4 +87,22 @@ for master in master_list:
     v = bsObj.find("meta", attrs={"property":"og:description"})
     og_description = v.get("content") if v else ""
 
-    print(','.join([og_title, og_type, og_url, og_image, og_site_name, og_description]))
+    id = master['id']
+    title = master['title']
+    public_url = master['public_url']
+
+    print(','.join([str(id), title, public_url, og_title, og_type, og_url, og_image, og_site_name, og_description]))
+
+
+for master in master_list:
+
+    html = requests.get(master['public_url'])
+
+    try:
+        bsObj = BeautifulSoup(html.text.encode(html.encoding), "html.parser")
+        parse_meta_data(bsObj)
+    except:
+        sys.stderr.write(master['public_url'])
+        bsObj = BeautifulSoup(html.text.encode('utf8'), "html.parser")
+        parse_meta_data(bsObj)
+
