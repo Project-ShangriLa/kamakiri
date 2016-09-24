@@ -4,6 +4,8 @@
 
 ShangriLa Anime APIからアニメ公式サイトのURLリストを取得し、サイトのメタ情報、keywordsやOGP(Open Graph protocol)をクロールしてくるツールです
 
+デフォルトではCSVファイル(UFT-8)に情報を保存します。
+
 
 ## 事前準備
 
@@ -25,4 +27,10 @@ https://github.com/Project-ShangriLa/shangrila
 
 ```
 python3 kamakiri.py -y 2016 -c 4
+```
+
+2016年秋期(4期)のアニメサイトのメタ情報を取得 (og_image画像を保存)
+
+```
+python3 kamakiri.py -y 2016 -c 4 -s
 ```

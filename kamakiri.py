@@ -1,7 +1,9 @@
 import sys
 import json
 import pymysql.cursors
+from urllib.request import urlretrieve
 import requests
+import os.path
 import csv
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -9,13 +11,23 @@ from optparse import OptionParser
 
 #python3 alice.py -y 2016 -c 4
 #python3 alice.py -y 2016 -c 4 -r
+
+SAVE_OGIMAGE_PATH = "./og_image/"
+
 parser = OptionParser()
 
 parser.add_option(
-    '-r', '--register_switch',
+    '-r', '--register_flag',
     action = 'store_true',
-    dest = 'register_switch',
+    dest = 'register_flag',
     help = 'DB register mode on'
+)
+
+parser.add_option(
+    '-s', '--save_image_flag',
+    action = 'store_true',
+    dest = 'save_image_flag',
+    help = 'save image flag'
 )
 
 parser.add_option(
@@ -35,12 +47,14 @@ parser.add_option(
 parser.set_defaults(
     year = "2016",
     cours_id = "1",
-    register_switch = False
+    register_switch = False,
+    save_image_flag = False
 )
 
 options, args = parser.parse_args()
 
-register_switch = options.register_switch
+register_flag = options.register_flag
+save_image_flag = options.save_image_flag
 year = options.year
 cours = options.cours
 save_file_name = "anime_" + year + "_C" + cours + ".csv"
@@ -105,6 +119,15 @@ def parse_meta_data(bsObj):
     meta_data['og_site_name'] = og_site_name
     meta_data['og_description'] = og_description
 
+    if save_image_flag and og_image:
+        root, ext = os.path.splitext(og_image)
+        save_image_filename = SAVE_OGIMAGE_PATH + meta_data['bases_id'] + ext
+        print(og_image + " -> " + save_image_filename)
+        try:
+            urlretrieve(og_image, save_image_filename)
+        except:
+            print("ERROR SAVE IMAGE:", sys.exc_info()[0])
+
     meta_data_list.append(meta_data)
 
 for master in master_list:
@@ -118,7 +141,7 @@ for master in master_list:
         parse_meta_data(bsObj)
     except:
         # エンコードが認識できないサイトがあるので一度だけリトライする
-        sys.stderr.write(master['public_url'])
+        print("ERROR!! " + master['public_url'])
         bsObj = BeautifulSoup(html.text.encode('utf8'), "html.parser")
         parse_meta_data(bsObj)
 

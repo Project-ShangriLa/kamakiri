@@ -17,3 +17,7 @@ mkmf.log
 /__pycache__/
 /config/conf.json
 *.iml
+/og_image/*.jpg
+/og_image/*.jpeg
+/og_image/*.png
+/og_image/*.gif
