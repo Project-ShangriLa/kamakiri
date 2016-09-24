@@ -34,3 +34,9 @@ python3 kamakiri.py -y 2016 -c 4
 ```
 python3 kamakiri.py -y 2016 -c 4 -s
 ```
+
+2016年秋期(4期)のアニメサイトのメタ情報を取得 (DB保存)
+
+```
+python3 kamakiri.py -y 2016 -c 4 -r
+```
