@@ -21,6 +21,8 @@ https://github.com/Project-ShangriLa/shangrila
 
 ### 使い方
 
-```
+2016年秋期(4期)のアニメサイトのメタ情報を取得
 
+```
+python3 kamakiri.py -y 2016 -c 4
 ```
