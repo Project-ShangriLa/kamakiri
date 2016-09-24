@@ -1,4 +1,5 @@
 import sys
+import traceback
 import json
 import pymysql.cursors
 from urllib.request import urlretrieve
@@ -69,6 +70,10 @@ result = requests.get(url)
 master_list = json.loads(result.text)
 
 meta_data_list = []
+meta_data_list_db = []
+master_ids = []
+
+log_time = datetime.now()
 
 def parse_meta_data(bsObj):
 
@@ -120,6 +125,10 @@ def parse_meta_data(bsObj):
     meta_data['og_site_name'] = og_site_name
     meta_data['og_description'] = og_description
 
+    meta_data_list_db.append([str(id), public_url, description, keywords, author,
+                              og_title, og_type, og_description, og_url, og_image, og_site_name,
+                              log_time, log_time, log_time])
+
     if save_image_flag and og_image:
         root, ext = os.path.splitext(og_image)
         # extにリクエストパラメータがついている場合があるので?以降を消去
@@ -137,6 +146,7 @@ for master in master_list:
 
     print(master['title'] + " " + master['public_url'])
 
+    master_ids.append(str(master['id']))
     html = requests.get(master['public_url'])
 
     try:
@@ -149,8 +159,29 @@ for master in master_list:
         parse_meta_data(bsObj)
 
 
-with open(save_file_name, 'wt') as fout:
-    cout = csv.DictWriter(fout, ['bases_id', 'title', 'public_url', 'description','keywords',
-                                 'author','og_title','og_type','og_url','og_image','og_site_name','og_description'])
-    cout.writeheader()
-    cout.writerows(meta_data_list)
+def build_insert_sql(table_name):
+    return 'INSERT INTO ' + table_name + ' VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
+
+if register_flag:
+    connection = pymysql.connect(host='localhost',
+                                 user='root',
+                                 password='',
+                                 db='anime_admin_development',
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
+
+    # Statusテーブルを初期化
+    with connection.cursor() as cursor:
+        sql = "delete FROM site_meta_data WHERE bases_id IN (" + ",".join(master_ids) + ")"
+        print(sql)
+        cursor.execute(sql)
+        cursor.executemany(build_insert_sql("site_meta_data"), meta_data_list_db)
+        cursor.executemany(build_insert_sql("site_meta_data_histories"), meta_data_list_db)
+        connection.commit()
+
+else:
+    with open(save_file_name, 'wt') as fout:
+        cout = csv.DictWriter(fout, ['bases_id', 'title', 'public_url', 'description','keywords',
+                                     'author','og_title','og_type','og_url','og_image','og_site_name','og_description'])
+        cout.writeheader()
+        cout.writerows(meta_data_list)
