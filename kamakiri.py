@@ -5,6 +5,7 @@ from urllib.request import urlretrieve
 import requests
 import os.path
 import csv
+import re
 from datetime import datetime
 from bs4 import BeautifulSoup
 from optparse import OptionParser
@@ -121,6 +122,8 @@ def parse_meta_data(bsObj):
 
     if save_image_flag and og_image:
         root, ext = os.path.splitext(og_image)
+        # extにリクエストパラメータがついている場合があるので?以降を消去
+        ext = re.sub(r'\?.*', "", ext)
         save_image_filename = SAVE_OGIMAGE_PATH + meta_data['bases_id'] + ext
         print(og_image + " -> " + save_image_filename)
         try:
