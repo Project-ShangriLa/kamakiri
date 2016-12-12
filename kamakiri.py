@@ -147,7 +147,13 @@ for master in master_list:
     print(master['title'] + " " + master['public_url'])
 
     master_ids.append(str(master['id']))
-    html = requests.get(master['public_url'])
+    html = None
+
+    try:
+        html = requests.get(master['public_url'])
+    except requests.exceptions.ConnectionError:
+        print("ConnectionError")
+        continue
 
     try:
         bsObj = BeautifulSoup(html.text.encode(html.encoding), "html.parser")
