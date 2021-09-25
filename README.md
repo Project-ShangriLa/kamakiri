@@ -12,7 +12,7 @@ ShangriLa Anime APIからアニメ公式サイトのURLリストを取得し、�
 パッケージ管理にpipenvを使用しています
 
 ```
-pip install pipenv
+pip3 install pipenv
 ```
 
 ## モジュールインストール
@@ -25,7 +25,7 @@ pipenv install
 
 以下から「site_meta_data」「site_meta_data_histories」テーブルのDDLを実行してください
 
-https://github.com/Project-ShangriLa/shangrila
+https://github.com/Project-ShangriLa/anime_master_db_ddl
 
 ### 使い方
 
