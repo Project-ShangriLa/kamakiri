@@ -7,12 +7,18 @@ ShangriLa Anime APIからアニメ公式サイトのURLリストを取得し、�
 デフォルトではCSVファイル(UFT-8)に情報を保存します。
 
 
-## 事前準備
+## 事前準備 [pipenvインストール]
 
-PythonのBeautifulSoupを使用しています
+パッケージ管理にpipenvを使用しています
 
 ```
-pip install BeautifulSoup
+pip install pipenv
+```
+
+## モジュールインストール
+
+```
+pipenv install
 ```
 
 ### DBを使用する場合
