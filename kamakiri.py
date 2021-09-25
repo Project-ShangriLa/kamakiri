@@ -5,6 +5,7 @@ import pymysql.cursors
 from urllib.request import urlretrieve
 import requests
 import os.path
+import os
 import csv
 import re
 from datetime import datetime
@@ -168,11 +169,16 @@ for master in master_list:
 def build_insert_sql(table_name):
     return 'INSERT INTO ' + table_name + ' VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
 
+ANIME_API_DB_HOST = os.getenv('ANIME_API_DB_HOST', "localhost")
+ANIME_API_DB_USER = os.getenv('ANIME_API_DB_USER', "root")
+ANIME_API_DB_PASS = os.getenv('ANIME_API_DB_PASS', "")
+ANIME_API_DB_DATABASE = os.getenv('ANIME_API_DB_DATABASE', "anime_admin_development")
+
 if register_flag:
-    connection = pymysql.connect(host='localhost',
-                                 user='root',
-                                 password='',
-                                 db='anime_admin_development',
+    connection = pymysql.connect(host=ANIME_API_DB_HOST,
+                                 user=ANIME_API_DB_USER,
+                                 password=ANIME_API_DB_PASS,
+                                 db=ANIME_API_DB_DATABASE,
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
 

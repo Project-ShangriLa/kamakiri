@@ -17,17 +17,38 @@ pip3 install pipenv
 
 ## モジュールインストール
 
+※VSCodeで開発する場合は予め下記を.zshrc等に記載
+
+```
+export PIPENV_VENV_IN_PROJECT=true
+```
+
 ```
 pipenv install
 ```
 
-### DBを使用する場合
+### DB(MySQL)を使用する場合
 
 以下から「site_meta_data」「site_meta_data_histories」テーブルのDDLを実行してください
 
 https://github.com/Project-ShangriLa/anime_master_db_ddl
 
+接続先は環境変数で設定します
+
+```
+export ANIME_API_DB_HOST="localhost"
+export ANIME_API_DB_USER="root"
+export ANIME_API_DB_PASS=""
+export ANIME_API_DB_DATABASE="anime_admin_development"
+```
+
 ### 使い方
+
+まず最初にpipenvでpyenv環境に入る
+
+```
+pipenv shell
+```
 
 2016年秋期(4期)のアニメサイトのメタ情報を取得
 
