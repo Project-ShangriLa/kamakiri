@@ -60,7 +60,7 @@ register_flag = options.register_flag
 save_image_flag = options.save_image_flag
 year = options.year
 cours = options.cours
-save_file_name = "anime_" + year + "_C" + cours + ".csv"
+save_file_name = './csv_out/' + "anime_" + year + "_C" + cours + ".csv"
 
 get_date = datetime.now()
 param = sys.argv
