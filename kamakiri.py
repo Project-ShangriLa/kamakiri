@@ -114,7 +114,6 @@ def parse_meta_data(bsObj):
     meta_data = {}
 
     meta_data['bases_id'] = str(id)
-    meta_data['title'] = title
     meta_data['public_url'] = public_url
     meta_data['description'] = description
     meta_data['keywords'] = keywords
@@ -125,6 +124,9 @@ def parse_meta_data(bsObj):
     meta_data['og_image'] = og_image
     meta_data['og_site_name'] = og_site_name
     meta_data['og_description'] = og_description
+    meta_data['get_date'] = log_time
+    meta_data['created_at'] = log_time
+    meta_data['updated_at'] = log_time
 
     meta_data_list_db.append([str(id), public_url, description, keywords, author,
                               og_title, og_type, og_description, og_url, og_image, og_site_name,
@@ -193,7 +195,8 @@ if register_flag:
 
 else:
     with open(save_file_name, 'wt') as fout:
-        cout = csv.DictWriter(fout, ['bases_id', 'title', 'public_url', 'description','keywords',
-                                     'author','og_title','og_type','og_url','og_image','og_site_name','og_description'])
+        cout = csv.DictWriter(fout, ['bases_id', 'public_url', 'description','keywords',
+                                     'author','og_title','og_type','og_description','og_url','og_image',
+                                     'og_site_name', 'get_date', 'created_at', 'updated_at'])
         cout.writeheader()
         cout.writerows(meta_data_list)
