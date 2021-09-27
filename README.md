@@ -7,7 +7,9 @@ ShangriLa Anime APIからアニメ公式サイトのURLリストを取得し、�
 デフォルトではCSVファイル(UFT-8)に情報を保存します。
 
 
-## 事前準備 [pipenvインストール]
+## ローカルPyhon3での実行 (非Docker実行)
+
+### 事前準備 [pipenvインストール]
 
 パッケージ管理にpipenvを使用しています
 
@@ -15,7 +17,7 @@ ShangriLa Anime APIからアニメ公式サイトのURLリストを取得し、�
 pip3 install pipenv
 ```
 
-## モジュールインストール
+### モジュールインストール
 
 ※VSCodeで開発する場合は予め下記を.zshrc等に記載
 
@@ -56,14 +58,44 @@ pipenv shell
 python3 kamakiri.py -y 2016 -c 4
 ```
 
+※csv_outフォルダにCSV出力
+
 2016年秋期(4期)のアニメサイトのメタ情報を取得 (og_image画像を保存)
 
 ```
 python3 kamakiri.py -y 2016 -c 4 -s
 ```
 
+※og_imageフォルダに画像出力
+
 2016年秋期(4期)のアニメサイトのメタ情報を取得 (DB保存)
 
 ```
 python3 kamakiri.py -y 2016 -c 4 -r
+```
+
+## Dockerでの実行
+
+### docker イメージ ビルド
+
+```
+docker build -t kamakiri .
+```
+
+### docker コンテナ実行 [CSV保存]
+
+```
+docker run --rm -v $(pwd)/csv_out:/usr/src/app/csv_out -i kamakiri python kamakiri.py -y 2021 -c 4
+```
+
+### docker コンテナ実行 [画像保存]
+
+```
+docker run --rm -v $(pwd)/og_image:/usr/src/app/og_image -i kamakiri python kamakiri.py -y 2021 -c 4 -s 
+```
+
+### docker コンテナ実行 [DB保存]
+
+```
+docker run --rm -e ANIME_API_DB_HOST="docker.for.mac.localhost" -e ANIME_API_DB_USER="root" -e ANIME_API_DB_PASS="" -i kamakiri python kamakiri.py -y 2021 -c 4 -r
 ```
