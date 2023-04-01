@@ -21,6 +21,7 @@ mkmf.log
 /og_image/*.jpeg
 /og_image/*.png
 /og_image/*.gif
+/og_image/old
 .DS_Store
 *.csv
 /csv_out/*.csv
