@@ -65,7 +65,7 @@ save_file_name = './csv_out/' + "anime_" + year + "_C" + cours + ".csv"
 get_date = datetime.now()
 param = sys.argv
 
-url = 'http://api.moemoe.tokyo/anime/v1/master/' + year + '/' + cours
+url = 'https://anime-api.deno.dev/anime/v1/master/' + year + '/' + cours
 result = requests.get(url)
 
 master_list = json.loads(result.text)
