@@ -47,6 +47,13 @@ parser.add_option(
     dest='cours',
 )
 
+parser.add_option(
+    '-i', '--id',
+    action='store',
+    type='str',
+    dest='base_id',
+)
+
 parser.set_defaults(
     year="2016",
     cours_id="1",
@@ -60,6 +67,7 @@ register_flag = options.register_flag
 save_image_flag = options.save_image_flag
 year = options.year
 cours = options.cours
+base_id = options.base_id
 save_file_name = './csv_out/' + "anime_" + year + "_C" + cours + ".csv"
 
 get_date = datetime.now()
@@ -149,19 +157,31 @@ def parse_meta_data(bsObj):
 
 for master in master_list:
 
+    # base_idに指定がある場合はそのIDのみ処理する
+    if base_id:
+        if base_id != str(master['id']):
+            continue
+
     print(master['title'] + " " + master['public_url'])
 
     master_ids.append(str(master['id']))
     html = None
 
     try:
-        html = requests.get(master['public_url'])
+        # requestsにユーザーエージェントを設定する
+        headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'}
+        # ヘッダーを付けてURLにアクセスする
+        html = requests.get(master['public_url'], headers=headers)
+        # html = requests.get(master['public_url'])
     except requests.exceptions.ConnectionError:
         print("ConnectionError")
         continue
 
     try:
         bsObj = BeautifulSoup(html.text.encode(html.encoding), "html.parser")
+
+        # bsObjの中身のHTMLを表示する
+        print(bsObj.prettify())
         parse_meta_data(bsObj)
     except:
         # エンコードが認識できないサイトがあるので一度だけリトライする

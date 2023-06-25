@@ -74,6 +74,17 @@ python3 kamakiri.py -y 2016 -c 4 -s
 python3 kamakiri.py -y 2016 -c 4 -r
 ```
 
+特定の作品IDのみ指定
+
+```
+python3 kamakiri.py -y 2023 -c 4 -i 1802 -s 
+```
+
+```
+python3 kamakiri.py -y 2023 -c 4 -i 1802 -r 
+```
+
+
 ## Dockerでの実行
 
 ### docker イメージ ビルド
